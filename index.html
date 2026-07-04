@@ -8,39 +8,250 @@
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json" />
-<meta name="theme-color" content="#3d6bff" />
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAMhElEQVR4nO3dfXAU933H8feddCdhHiQZPYCQBQIhLCTAIBthMK4BNxgnuLi1zThJnemMm4bSxnEyNJPanc60kyaTpzZNqEPraRKaBzuODQYnxkkMdsDE2DIymCeJB0mAJIQQkkCg51P/gCEMluRdfe/YPfF5DX8wut/u/mDeurvd290LLFzdh8hQBb2egMQ3BSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCYKSEwUkJgoIDFRQGKigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCaJXk/AkWCAydlMz2PSOHKzGDuGm8eQHCaUSDBAZzcdXXR209VN83kaW/74p+YUJxvp6fVs5imjmJpDQQ7ZGWSkkJFGykiSwoQTCYeIROjuobOb8xc5d4GmczScpb6J6lNU1dPU6tm0nfN1QIEAcwtZUsJdMxk1YsBhI5IYkXT577lZ1z7a08uJ01TXc7SO/VUcqKa9M1YTviQpRMk0SqdTOp3s9MFGBhNITGBEEqmj+nm0qZXyw5QfprySk40xmqxVYOHqPq/n0I9AgKVz+cul3JIZ5TVHIhytY98xtuziYE2UVz41h+UL+NM7GJkc5TU3trBzH1t2sb8qyms28mNAE8fx1GPcmhvbrfz0t6x7OWprmz6Jx5dz+7SorXAgxxvYsovX3qGxJebbcsJ3L2GL5vCVT5Mc9noejqWn8IVHuHvWddpcbhaffYCSaTz5veu0xcH5K6CP38maTxIMeD0Px+4r5fMPDfb+bNjzUUBzC1nzaNzUk5jAk4+wfIHX8/CaXwIaM5KnHiMYJ4elRo7g63/DrHyv5+EDfgnosw+QNtrrSThzUzLfXs30SV7Pwx988Sufmcb987yehDOhRL6xSvX8kS+egZbNIzHB6eBIhN2Hea+Coyepa6LlPJ3ddPcQDpEcJm0M6SnkZpKbxa0TyZ9AKKr/xCceZuaUIS57sYOyCg7WcOQkDWc5e46Obnp6CIdICnPzaMaOISeTvPFMzWHaREKO/0885IuAFs12OnJbOT/YSH1TPw91dNHRRUsbVXW8e/DyD0MJzMqndDqlRUwaZ53n0rk8MKR3zeWVvPgmf9hPd08/j16aeWsbVfWUVVz+YThEUR7zi7lrBhMyhj7nWPM+oDEjyRvvaOQvtvL9l9ytvLuXsgrKKli7gcw0Fs3m/judbu4aaaN54mHXS1Wf4rsv8F7FR4+8Rlc35ZWUV7L2JW6dyLJS7r2d0Te5Xk+seR9QQQ4BB7vup5t5ZqNpQ6ebeX4rz2+lKI/753Gxw93iq1a4Pt7zyk6++wKd3e6W+rBDNRyq4ZmNLJvHI4v89YTkfUCDf9x4xZvv0xuJzhb3V7n+RGlyNkvnulvkh7/mh792t8jgOrrY8Hte3sHSuRTlRXPNFt4HlDbG0bBTZ2M8j0E9eq+jp8krfvlGlOu5IhLh1bd59e2YrHwIvN+NTw45GnblhI3rLz2FJSUuxh+odv1eLX55H5DDs73mFsZ4HgNbUuLiKENvhK/9hEiUXm39z/uAWi84GjZzCh+/M8ZTGcA9jo8yAK++Tc2pmE3Ff7wPqKXN6cg1n+Tv/pwxI2M5mw9JG+3uuPNzr8dqJv7k/Zto57+vwQCPLGbFQrbvZfseyio45+zZy2LGFBdvn/cd43hDLGfjP94HdKSW1jZS+jspuF/hEEtKWFJCXx8nTnOgmorjHDrO0Vo6uqI/vWI3O8w79kZ/Aj7nfUB9feyuZNEc1wsGAuRmkZvFfaUAkQg1p6g4wcEa9h3jWF10jhsV3OJicJn7I87xzvuAgBffHEpA1wgGycsmL/tyTxc7KD/MOwfZvoczhutjxo91OrKnl6q6oW8oTvkioL1HKT/M7KnRXOdNySyYwYIZfOFh9h7lV39g6266XH6qEAySmeZ08InTdHt3AZpXfBEQ8P0XeeZLhJ0dVHQlEGBWPrPyWbWC517nl2/0/5F4v9JGk+B4P9XtZRKP3cfjn3C3yDUOVPO5b5nWYOf9bvwlh0/yjZ/FdhNpo1m1gp/+E7ff6nQRVxeHnD03hEnFPb8EBPzmXZ7dHPOtjBvLt1fz+HJHO+euAnL7+jg8+CggYP1rfHV9TPbGrxYI8NhS/vbBjx7p6mzGLsevjMOJvwICXnuHv/o3dh2I+YZWLr68vzaIHjdNRPfc2Xjhu4CA2jOs+S+e+M+YH1ZZ8yjjbh5sgKvnwqQY7AH4n39/ay6d0JmbxbJSFpe4OB7jXCiRT3+Mbz034IB2NwGlxsllSdHl34AuOd7Auk2s20TeeOYWMjOf4rxoXkG27E5+9OqARxqbz9Mbcbonn5katVnFEb8HdEVVPVX1PL8VYEI6RXmX/0yZ4OJQzYeFEphXxCs7+380EqGxmXHOnvxuySQhGLXzbuNF3AR0tdoz1J7hN+8CJIUoymNOAXcUUjhxKGubPXXAgID6JqcBhRKZOI5jN9inGXEZ0NU6u9ldye5Knn2FrDSWlvIXf+LuNW7wS9wrTzC7wOmq5hS4CGj9FtZv6f+htV9kxmSn6/GWH/fChqyhmfVbWPnPbNzuYqn0lMEOKu6vdrGq+TNcDB4ehlVAl3R08Z3n2fyW0/HB4GB3pPvgmItNzylw8eHr8DAMA7rkBy+7+GwhZeDTZJtaOeT4VorBAA/d43Tw8DBsAzp/kX2Orx4c/HOxbeUutrtiIRmpLsbHu2EbENDg+FrEwa8+/l2Zi53z5DBfXOl08DDgfUAjR/D1zzE5O/prdn4t4vmLgz3a2MK23S62u2AGKxe7GB/XvA8oAPOL+d+v8PRnonAHlqtNzXE0rKXtoz/zcnuxzqoV3Hu7u0XilPcBXRIM8LE7+PFTfC1K9x4sne70LhZOLsSpPMHvylxsPRjk6c+wcomLReKUvw4kBgKXT2SuPsWmHbz+Hs3nh7KeCel8+VNOBzu8U8czG1kww8XLYjDA6gcpKeA/XqDujNOl4o5fnoGuMWkcn3+IDV/l3/+eB+928YUHCUHun8e6fyA9xekiDk8aaWxh7Qan67xiXhH/9zRrHmXKBKeLBAPxdGqRr2caDFIyjZJpAI0tHKym8iTVpzh9lsZWLnbQ2UViIslhMlLJzeK2fO6a6W4v+twFdjs+62jTDm7Ld/3mJpTI8gUsX8CJ07x7kIM1nDhNQzMX2unqJiFIOEzqKDJTmTSewomUTo+bG9bi84CulpFKxm3cfVuUV7vpLXefn3/z5+Rmubva8IpbMqP/3TGe8+lL2PVxsYMXtrlbpL2TL62l+ka6/8bgbuiA/mfzUN6kt7bx5Pc4UhuDCcWhGzegtz5gw++HuGxTK6u/w859UZ1QfLpBA9p3jH/9MRHDV6W1d/KP63h2s5eXM/f54Kve4uZNdBTt2Mu//CgKV59F+lj/Gm/t48ufivnX412jrZ1XdvLSm9d1o/3y/hsLgwEWl7BwFqWF3BTtb4q8xoV2/nvz0F+5BhIIcM9s/no5OTG+g3NfH+8fYcsutu2O+eWXDnkf0BWhREqmsXAm84qif0ZEWzu/2slPfkur4zvquRUMMr+YP7uLOwqj/K1nvRH2HmX7HrbvoaE5mmu281FAV8tKo3gyxZMpziM/Z+jXXbR3UlbB9j28UX79fmUzUplfzPxiZhcM/bs7O7s5WssHx3j/MHuO0NYe1SlGj08Dulookex0cjLITmdCOtnppI66/FXfyUmMSCIhSG8vXT20tdN8nqZWahs53sCh4xyp9fKOu8Egk8YxLZfJ48m8mcxUxqYwIkxSmHAI+ujqobuHC+20XKCljcZm6pqoa6SqnuOn4+NewXEQkPjZDbobL9GigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCYKSEwUkJgoIDFRQGKigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCYKSEwUkJgoIDFRQGKigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBicn/AyBoD9yeWnLcAAAAAElFTkSuQmCC" />
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAMhElEQVR4nO3dfXAU933H8feddCdhHiQZPYCQBQIhLCTAIBthMK4BNxgnuLi1zThJnemMm4bSxnEyNJPanc60kyaTpzZNqEPraRKaBzuODQYnxkkMdsDE2DIymCeJB0mAJIQQkkCg51P/gCEMluRdfe/YPfF5DX8wut/u/mDeurvd290LLFzdh8hQBb2egMQ3BSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCYKSEwUkJgoIDFRQGKigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBiYkCEhMFJCYKSEwUkJgoIDFRQGKigMREAYmJAhITBSQmCkhMFJCYKCAxUUBiooDERAGJiQISEwUkJgpITBSQmCggMVFAYqKAxEQBicn/AyBoD9yeWnLcAAAAAElFTkSuQmCC" />
+<meta name="theme-color" content="#F2F0E8" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="StudyGroup" />
-<link rel="apple-touch-icon" href="data:image/png;base64,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" />
-<link rel="icon" href="data:image/png;base64,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" />
+
+<!-- 저장된 테마를 body가 그려지기 전에 적용해서 깜빡임을 방지 -->
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem("studygroup-theme");
+    var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  } catch (e) {}
+})();
+</script>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-  body { background-color: #f6f7fb; color: #1a1a2e; }
-  .brand-bg { background-color: #3d6bff; }
-  .brand-bg:hover { background-color: #2c53e6; }
-  .brand-text { color: #2c53e6; }
-  .brand-ring:focus { outline: none; box-shadow: 0 0 0 2px #3d6bff; }
+  @font-face {
+    font-family: "LXGW WenKai Mono KR";
+    src: url("./fonts/LXGWWenKaiMonoKR-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root,
+  [data-theme="light"] {
+    --color-bg: #f2f0e8;
+    --color-grid-dot: rgba(31, 36, 48, 0.07);
+    --color-surface: #fffdf8;
+    --color-surface-2: #ece8dc;
+    --color-border: #ddd6c4;
+    --color-text: #262220;
+    --color-text-muted: #7a7568;
+    --color-accent: #b5402f;
+    --color-accent-strong: #963423;
+    --color-accent-soft: rgba(181, 64, 47, 0.12);
+    --color-accent-contrast: #fdf6ee;
+    --color-success: #2e6b4f;
+    --color-success-soft: rgba(46, 107, 79, 0.12);
+    --color-warning: #9c7a1f;
+    --color-warning-soft: rgba(156, 122, 31, 0.14);
+    --shadow-card: 0 1px 2px rgba(38, 34, 32, 0.05), 0 10px 24px -14px rgba(38, 34, 32, 0.18);
+  }
+
+  [data-theme="dark"] {
+    --color-bg: #16171c;
+    --color-grid-dot: rgba(230, 227, 218, 0.06);
+    --color-surface: #1f2127;
+    --color-surface-2: #26282f;
+    --color-border: #34363f;
+    --color-text: #e9e6dc;
+    --color-text-muted: #93908a;
+    --color-accent: #e2685a;
+    --color-accent-strong: #ee8577;
+    --color-accent-soft: rgba(226, 104, 90, 0.16);
+    --color-accent-contrast: #1a1315;
+    --color-success: #5cb891;
+    --color-success-soft: rgba(92, 184, 145, 0.16);
+    --color-warning: #d3ab52;
+    --color-warning-soft: rgba(211, 171, 82, 0.16);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 14px 30px -16px rgba(0, 0, 0, 0.6);
+  }
+
+  * { border-color: var(--color-border); }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: "LXGW WenKai Mono KR", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
+    background-image: radial-gradient(var(--color-grid-dot) 1px, transparent 1px);
+    background-size: 22px 22px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    min-height: 100vh;
+  }
+
+  h1, h2, .brand-word, .stat-num { font-family: "LXGW WenKai Mono KR", "Noto Sans KR", ui-sans-serif, sans-serif; }
+
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 1.1rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .brand-bg { background-color: var(--color-accent); color: var(--color-accent-contrast); }
+  .brand-bg:hover { background-color: var(--color-accent-strong); }
+  .brand-text { color: var(--color-accent); }
+  .brand-ring:focus { outline: none; box-shadow: 0 0 0 2px var(--color-accent-soft), 0 0 0 1px var(--color-accent); }
+
+  .surface-input {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  .surface-input::placeholder { color: var(--color-text-muted); }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  input::placeholder { color: var(--color-text-muted); opacity: 1; }
+
+  .muted { color: var(--color-text-muted); }
+
+  .theme-toggle-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: var(--color-text);
+  }
+  .theme-toggle-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+  /* 채점 도장 스타일 상태 버튼 */
+  .stamp {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "LXGW WenKai Mono KR", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    border: 2px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+  .stamp:hover { transform: scale(1.06); }
+  .stamp:active { transform: scale(0.9); }
+  .stamp-unsolved { border-style: dashed; }
+  .stamp-solved {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-accent-soft);
+    transform: rotate(-8deg);
+  }
+  .stamp-solved:hover { transform: rotate(-8deg) scale(1.06); }
+  .stamp-unknown {
+    border-color: var(--color-warning);
+    color: var(--color-warning);
+    background: var(--color-warning-soft);
+    transform: rotate(6deg);
+  }
+  .stamp-unknown:hover { transform: rotate(6deg) scale(1.06); }
+
+  .mini-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 11px;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid transparent;
+  }
+  .mini-unsolved { background: var(--color-surface-2); color: var(--color-text-muted); border-color: var(--color-border); }
+  .mini-solved { background: var(--color-accent-soft); color: var(--color-accent); }
+  .mini-unknown { background: var(--color-warning-soft); color: var(--color-warning); }
+
+  .stamp-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    border: 2px solid var(--color-accent);
+    border-radius: 9999px;
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 1.05rem;
+    transform: rotate(-8deg);
+  }
+
+  .invite-chip {
+    font-family: "LXGW WenKai Mono KR", monospace;
+    letter-spacing: 0.15em;
+    background: var(--color-surface-2);
+    border: 1px dashed var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.125rem 0.5rem;
+  }
 </style>
 </head>
 <body>
+  <button id="theme-toggle" type="button" aria-label="테마 전환" class="theme-toggle-btn">🌙</button>
   <div id="app" class="min-h-screen"></div>
 
 <script>
-// =========================================================
-// 0. Supabase 설정 -- 여기에 본인의 프로젝트 값을 넣으세요
-// =========================================================
 const SUPABASE_URL = "https://apmvrlymguvusjjuflnm.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_wMZnT9CV1AOLcChun86gVQ_BvRN-XxO";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =========================================================
-// 1. 유틸
+// 테마 (라이트/다크 모드)
 // =========================================================
+const THEME_KEY = "studygroup-theme";
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {}
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = theme === "dark" ? "☀️" : "🌙";
+  const metaTheme = document.querySelector('meta[name="theme-color"]');
+  if (metaTheme) metaTheme.setAttribute("content", theme === "dark" ? "#16171c" : "#f2f0e8");
+}
+
+function initTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "light";
+  applyTheme(current);
+  const btn = document.getElementById("theme-toggle");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      const now = document.documentElement.getAttribute("data-theme");
+      applyTheme(now === "dark" ? "light" : "dark");
+    });
+  }
+}
+
 function escapeHtml(str) {
   if (str === null || str === undefined) return "";
   return String(str)
@@ -52,9 +263,9 @@ function escapeHtml(str) {
 }
 
 const STATUS_CONFIG = {
-  unsolved: { label: "미해결", cls: "bg-gray-100 text-gray-500", next: "solved" },
-  solved: { label: "해결", cls: "bg-green-100 text-green-700", next: "unknown" },
-  unknown: { label: "모르겠음", cls: "bg-amber-100 text-amber-700", next: "unsolved" },
+  unsolved: { label: "미해결", symbol: "＿", stampCls: "stamp stamp-unsolved", miniCls: "mini-badge mini-unsolved", next: "solved" },
+  solved: { label: "해결", symbol: "○", stampCls: "stamp stamp-solved", miniCls: "mini-badge mini-solved", next: "unknown" },
+  unknown: { label: "모르겠음", symbol: "△", stampCls: "stamp stamp-unknown", miniCls: "mini-badge mini-unknown", next: "unsolved" },
 };
 
 function renderApp(html) {
@@ -78,13 +289,10 @@ async function getProfile(userId) {
   return data;
 }
 
-// =========================================================
-// 2. 라우터
-// =========================================================
 async function route() {
   const hash = location.hash || "#/groups";
   const path = hash.replace(/^#/, "");
-  const parts = path.split("/").filter(Boolean); // ["group", "<id>", "new-problem"]
+  const parts = path.split("/").filter(Boolean);
 
   const user = await currentUser();
 
@@ -119,6 +327,7 @@ async function route() {
 
 window.addEventListener("hashchange", route);
 window.addEventListener("DOMContentLoaded", () => {
+  initTheme();
   route();
   registerServiceWorker();
 });
@@ -130,28 +339,28 @@ function registerServiceWorker() {
   }
 }
 
-// =========================================================
-// 3. 로그인 / 회원가입 / 온보딩
-// =========================================================
 function renderLogin() {
   renderApp(`
     <div class="min-h-screen flex items-center justify-center px-4">
-      <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8">
-        <h1 class="text-2xl font-bold mb-1">StudyGroup</h1>
-        <p class="text-sm text-gray-500 mb-6">로그인해서 스터디를 시작하세요</p>
+      <div class="w-full max-w-sm card p-8">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="stamp-mark">○</span>
+          <h1 class="text-2xl font-bold">StudyGroup</h1>
+        </div>
+        <p class="text-sm text-[var(--color-text-muted)] mb-6">로그인해서 스터디를 시작하세요</p>
         <form id="login-form" class="space-y-4">
           <div>
-            <label class="text-sm font-medium text-gray-700">이메일</label>
-            <input type="email" id="login-email" required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
+            <label class="text-sm font-medium text-[var(--color-text)]">이메일</label>
+            <input type="email" id="login-email" required class="mt-1 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700">비밀번호</label>
-            <input type="password" id="login-password" required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
+            <label class="text-sm font-medium text-[var(--color-text)]">비밀번호</label>
+            <input type="password" id="login-password" required class="mt-1 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
           </div>
-          <p id="login-error" class="text-sm text-red-500 hidden"></p>
-          <button type="submit" id="login-submit" class="w-full rounded-lg brand-bg text-white font-medium py-2">로그인</button>
+          <p id="login-error" class="text-sm text-[var(--color-accent)] hidden"></p>
+          <button type="submit" id="login-submit" class="w-full rounded-lg brand-bg font-medium py-2">로그인</button>
         </form>
-        <p class="text-sm text-gray-500 mt-6 text-center">
+        <p class="text-sm text-[var(--color-text-muted)] mt-6 text-center">
           계정이 없으신가요? <a href="#/signup" class="brand-text font-medium">회원가입</a>
         </p>
       </div>
@@ -185,23 +394,26 @@ function renderLogin() {
 function renderSignup() {
   renderApp(`
     <div class="min-h-screen flex items-center justify-center px-4">
-      <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8">
-        <h1 class="text-2xl font-bold mb-1">회원가입</h1>
-        <p class="text-sm text-gray-500 mb-6">StudyGroup에서 함께 공부해요</p>
+      <div class="w-full max-w-sm card p-8">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="stamp-mark">○</span>
+          <h1 class="text-2xl font-bold">회원가입</h1>
+        </div>
+        <p class="text-sm text-[var(--color-text-muted)] mb-6">StudyGroup에서 함께 공부해요</p>
         <form id="signup-form" class="space-y-4">
           <div>
-            <label class="text-sm font-medium text-gray-700">이메일</label>
-            <input type="email" id="signup-email" required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
+            <label class="text-sm font-medium text-[var(--color-text)]">이메일</label>
+            <input type="email" id="signup-email" required class="mt-1 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
           </div>
           <div>
-            <label class="text-sm font-medium text-gray-700">비밀번호</label>
-            <input type="password" id="signup-password" required minlength="6" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
+            <label class="text-sm font-medium text-[var(--color-text)]">비밀번호</label>
+            <input type="password" id="signup-password" required minlength="6" class="mt-1 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
           </div>
-          <p id="signup-error" class="text-sm text-red-500 hidden"></p>
-          <p id="signup-notice" class="text-sm text-green-600 hidden"></p>
-          <button type="submit" id="signup-submit" class="w-full rounded-lg brand-bg text-white font-medium py-2">회원가입</button>
+          <p id="signup-error" class="text-sm text-[var(--color-accent)] hidden"></p>
+          <p id="signup-notice" class="text-sm text-[var(--color-success)] hidden"></p>
+          <button type="submit" id="signup-submit" class="w-full rounded-lg brand-bg font-medium py-2">회원가입</button>
         </form>
-        <p class="text-sm text-gray-500 mt-6 text-center">
+        <p class="text-sm text-[var(--color-text-muted)] mt-6 text-center">
           이미 계정이 있으신가요? <a href="#/login" class="brand-text font-medium">로그인</a>
         </p>
       </div>
@@ -243,14 +455,14 @@ function renderSignup() {
 function renderOnboarding(user) {
   renderApp(`
     <div class="min-h-screen flex items-center justify-center px-4">
-      <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8">
+      <div class="w-full max-w-sm card p-8">
         <h1 class="text-2xl font-bold mb-1">닉네임 설정</h1>
-        <p class="text-sm text-gray-500 mb-6">그룹원들에게 보여질 닉네임을 정해주세요</p>
+        <p class="text-sm text-[var(--color-text-muted)] mb-6">그룹원들에게 보여질 닉네임을 정해주세요</p>
         <form id="onboarding-form" class="space-y-4">
           <input type="text" id="onboarding-username" required minlength="2" maxlength="20" placeholder="닉네임"
-            class="w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
-          <p id="onboarding-error" class="text-sm text-red-500 hidden"></p>
-          <button type="submit" id="onboarding-submit" class="w-full rounded-lg brand-bg text-white font-medium py-2">시작하기</button>
+            class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
+          <p id="onboarding-error" class="text-sm text-[var(--color-accent)] hidden"></p>
+          <button type="submit" id="onboarding-submit" class="w-full rounded-lg brand-bg font-medium py-2">시작하기</button>
         </form>
       </div>
     </div>
@@ -284,9 +496,6 @@ async function handleSignOut() {
   location.hash = "#/login";
 }
 
-// =========================================================
-// 4. 그룹 목록 (진행률 포함)
-// =========================================================
 async function fetchGroupsWithProgress(userId) {
   const { data: memberships } = await sb.from("group_members").select("group_id").eq("user_id", userId);
   const groupIds = (memberships || []).map((m) => m.group_id);
@@ -343,7 +552,7 @@ async function fetchGroupsWithProgress(userId) {
 }
 
 async function renderGroupsList(user, profile) {
-  renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><p class="text-sm text-gray-400 text-center py-16">불러오는 중...</p></div>`);
+  renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><p class="text-sm text-[var(--color-text-muted)] text-center py-16">불러오는 중...</p></div>`);
   const groups = await fetchGroupsWithProgress(user.id);
 
   const groupCards = groups
@@ -354,23 +563,23 @@ async function renderGroupsList(user, profile) {
               const pct = p.total > 0 ? Math.round((p.solved / p.total) * 100) : 0;
               return `
                 <div>
-                  <div class="flex justify-between text-xs text-gray-500 mb-0.5">
+                  <div class="flex justify-between text-xs text-[var(--color-text-muted)] mb-0.5">
                     <span>${escapeHtml(p.username)}</span>
                     <span>${p.solved}/${p.total} (${pct}%)</span>
                   </div>
-                  <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="w-full h-2 bg-[var(--color-surface-2)] rounded-full overflow-hidden">
                     <div class="h-full brand-bg rounded-full" style="width:${pct}%"></div>
                   </div>
                 </div>`;
             })
             .join("")
-        : `<p class="text-xs text-gray-400">아직 등록된 문제가 없습니다.</p>`;
+        : `<p class="text-xs text-[var(--color-text-muted)]">아직 등록된 문제가 없습니다.</p>`;
 
       return `
-        <a href="#/group/${g.id}" class="block bg-white rounded-2xl shadow-sm p-5 hover:shadow-md transition">
+        <a href="#/group/${g.id}" class="block card p-5 hover:shadow-md hover:-translate-y-0.5 transition-all">
           <div class="flex items-center justify-between mb-3">
             <h2 class="font-semibold text-lg">${escapeHtml(g.name)}</h2>
-            <span class="text-xs text-gray-400">초대코드 ${escapeHtml(g.invite_code)}</span>
+            <span class="text-[11px] invite-chip text-[var(--color-text-muted)]">${escapeHtml(g.invite_code)}</span>
           </div>
           <div class="space-y-2">${progressHtml}</div>
         </a>`;
@@ -381,24 +590,28 @@ async function renderGroupsList(user, profile) {
     <div class="max-w-2xl mx-auto px-4 py-8">
       <div class="flex items-center justify-between mb-6">
         <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="stamp-mark" style="width:1.5rem;height:1.5rem;min-width:1.5rem;font-size:0.8rem;">○</span>
+            <p class="text-xs tracking-[0.2em] text-[var(--color-text-muted)] uppercase">StudyGroup</p>
+          </div>
           <h1 class="text-2xl font-bold">내 스터디 그룹</h1>
-          <p class="text-sm text-gray-500">${escapeHtml(profile.username)}님, 환영합니다</p>
+          <p class="text-sm text-[var(--color-text-muted)]">${escapeHtml(profile.username)}님, 환영합니다</p>
         </div>
-        <button id="sign-out-btn" class="text-sm text-gray-500 hover:text-gray-700">로그아웃</button>
+        <button id="sign-out-btn" class="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)]">로그아웃</button>
       </div>
 
-      <a href="#/new-group" class="block text-center rounded-lg brand-bg text-white font-medium py-2.5 mb-4">+ 그룹 생성</a>
+      <a href="#/new-group" class="block text-center rounded-lg brand-bg font-medium py-2.5 mb-4">+ 그룹 생성</a>
 
       <form id="join-group-form" class="flex gap-2 mb-8">
-        <input type="text" id="join-code-input" placeholder="초대 코드 입력" class="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm brand-ring" />
-        <button type="submit" class="rounded-lg bg-white border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50">참여</button>
+        <input type="text" id="join-code-input" placeholder="초대 코드 입력" class="flex-1 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm brand-ring" />
+        <button type="submit" class="rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] px-4 py-2 text-sm font-medium hover:bg-[var(--color-surface-2)]">참여</button>
       </form>
-      <p id="join-error" class="text-xs text-red-500 -mt-6 mb-6 hidden"></p>
+      <p id="join-error" class="text-xs text-[var(--color-accent)] -mt-6 mb-6 hidden"></p>
 
       <div class="space-y-4">
         ${
           groups.length === 0
-            ? `<p class="text-sm text-gray-400 text-center py-10">아직 속한 그룹이 없습니다. 그룹을 만들거나 초대 코드로 참여해보세요.</p>`
+            ? `<p class="text-sm text-[var(--color-text-muted)] text-center py-10">아직 속한 그룹이 없습니다. 그룹을 만들거나 초대 코드로 참여해보세요.</p>`
             : groupCards
         }
       </div>
@@ -425,23 +638,20 @@ async function renderGroupsList(user, profile) {
   });
 }
 
-// =========================================================
-// 5. 그룹 생성
-// =========================================================
 function renderNewGroup(user) {
   renderApp(`
     <div class="min-h-screen flex items-center justify-center px-4">
-      <div class="w-full max-w-sm bg-white rounded-2xl shadow-sm p-8">
-        <a href="#/groups" class="text-sm text-gray-400">← 목록으로</a>
+      <div class="w-full max-w-sm card p-8">
+        <a href="#/groups" class="text-sm text-[var(--color-text-muted)]">← 목록으로</a>
         <h1 class="text-2xl font-bold mt-2 mb-6">새 그룹 만들기</h1>
         <form id="new-group-form" class="space-y-4">
           <div>
-            <label class="text-sm font-medium text-gray-700">그룹 이름</label>
+            <label class="text-sm font-medium text-[var(--color-text)]">그룹 이름</label>
             <input type="text" id="new-group-name" required placeholder="예: 수능 수학 스터디"
-              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 brand-ring" />
+              class="mt-1 w-full rounded-lg border border-[var(--color-border)] px-3 py-2 brand-ring" />
           </div>
-          <p id="new-group-error" class="text-sm text-red-500 hidden"></p>
-          <button type="submit" id="new-group-submit" class="w-full rounded-lg brand-bg text-white font-medium py-2">그룹 만들기</button>
+          <p id="new-group-error" class="text-sm text-[var(--color-accent)] hidden"></p>
+          <button type="submit" id="new-group-submit" class="w-full rounded-lg brand-bg font-medium py-2">그룹 만들기</button>
         </form>
       </div>
     </div>
@@ -487,9 +697,6 @@ function renderNewGroup(user) {
   });
 }
 
-// =========================================================
-// 6. 그룹 상세 (문제 트리 + 상태 토글)
-// =========================================================
 function buildTree(problems) {
   const map = new Map();
   problems.forEach((p) => map.set(p.id, { ...p, children: [] }));
@@ -546,13 +753,13 @@ function renderProblemNode(node, depth, state) {
 
   const othersHtml =
     isLeaf && state.members.length > 1
-      ? `<div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t border-gray-100">` +
+      ? `<div class="flex flex-wrap gap-1.5 mt-3 pt-3 border-t" style="border-color:var(--color-border)">` +
         state.members
           .filter((m) => m.user_id !== state.currentUserId)
           .map((m) => {
             const s = state.statusMap[`${node.id}::${m.user_id}`] || "unsolved";
             const c = STATUS_CONFIG[s];
-            return `<span class="text-[11px] px-2 py-0.5 rounded-full ${c.cls}">${escapeHtml(m.username)}: ${c.label}</span>`;
+            return `<span class="${c.miniCls}" title="${c.label}">${c.symbol} ${escapeHtml(m.username)}</span>`;
           })
           .join("") +
         `</div>`
@@ -564,12 +771,12 @@ function renderProblemNode(node, depth, state) {
 
   return `
     <div style="margin-left:${depth * 16}px">
-      <div class="bg-white rounded-xl border border-gray-200 p-4">
-        <div class="flex items-start justify-between gap-3">
+      <div class="card p-4">
+        <div class="flex items-center justify-between gap-3">
           <p class="font-medium text-sm flex-1">${escapeHtml(node.title)}</p>
           ${
             isLeaf
-              ? `<button data-toggle-id="${node.id}" class="toggle-status-btn shrink-0 text-xs font-medium px-3 py-1.5 rounded-full ${cfg.cls}">${cfg.label}</button>`
+              ? `<button data-toggle-id="${node.id}" title="${cfg.label}" aria-label="${cfg.label}" class="toggle-status-btn ${cfg.stampCls}">${cfg.symbol}</button>`
               : ""
           }
         </div>
@@ -580,11 +787,11 @@ function renderProblemNode(node, depth, state) {
 }
 
 async function renderGroupDetail(user, groupId) {
-  renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><p class="text-sm text-gray-400 text-center py-16">불러오는 중...</p></div>`);
+  renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><p class="text-sm text-[var(--color-text-muted)] text-center py-16">불러오는 중...</p></div>`);
   const detail = await fetchGroupDetail(groupId);
 
   if (!detail) {
-    renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><a href="#/groups" class="text-sm text-gray-400">← 그룹 목록</a><p class="mt-6 text-center text-gray-500">그룹을 찾을 수 없습니다.</p></div>`);
+    renderApp(`<div class="max-w-2xl mx-auto px-4 py-8"><a href="#/groups" class="text-sm text-[var(--color-text-muted)]">← 그룹 목록</a><p class="mt-6 text-center text-[var(--color-text-muted)]">그룹을 찾을 수 없습니다.</p></div>`);
     return;
   }
 
@@ -605,12 +812,12 @@ function drawGroupDetail() {
   const tree = buildTree(s.problems);
   const treeHtml = tree.length
     ? tree.map((n) => renderProblemNode(n, 0, s)).join("")
-    : `<p class="text-sm text-gray-400 text-center py-16">아직 등록된 문제가 없습니다. 위의 '문제 등록' 버튼으로 추가해보세요.</p>`;
+    : `<p class="text-sm text-[var(--color-text-muted)] text-center py-16">아직 등록된 문제가 없습니다. 위의 '문제 등록' 버튼으로 추가해보세요.</p>`;
 
   const membersHtml = s.members
     .map(
       (m) =>
-        `<span class="text-xs bg-white border border-gray-200 rounded-full px-3 py-1">${escapeHtml(m.username)}${
+        `<span class="text-xs card rounded-full px-3 py-1" style="box-shadow:none;">${escapeHtml(m.username)}${
           m.user_id === s.currentUserId ? " (나)" : ""
         }</span>`
     )
@@ -618,22 +825,22 @@ function drawGroupDetail() {
 
   renderApp(`
     <div class="max-w-2xl mx-auto px-4 py-8">
-      <a href="#/groups" class="text-sm text-gray-400">← 그룹 목록</a>
+      <a href="#/groups" class="text-sm text-[var(--color-text-muted)]">← 그룹 목록</a>
       <div class="flex items-center justify-between mt-2 mb-6">
         <h1 class="text-2xl font-bold">${escapeHtml(s.group.name)}</h1>
-        <a href="#/group/${s.groupId}/new-problem" class="rounded-lg brand-bg text-white text-sm font-medium px-4 py-2">+ 문제 등록</a>
+        <a href="#/group/${s.groupId}/new-problem" class="rounded-lg brand-bg text-sm font-medium px-4 py-2">+ 문제 등록</a>
       </div>
 
-      <div class="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center justify-between">
+      <div class="card px-4 py-3 flex items-center justify-between">
         <div>
-          <p class="text-xs text-gray-400">초대 코드</p>
+          <p class="text-xs text-[var(--color-text-muted)]">초대 코드</p>
           <p class="text-lg font-mono font-semibold tracking-widest">${escapeHtml(s.group.invite_code)}</p>
         </div>
         <button id="copy-invite-btn" class="text-sm font-medium brand-text">복사</button>
       </div>
 
       <div class="mt-6 mb-4">
-        <h2 class="text-sm font-semibold text-gray-500 mb-2">그룹원 (${s.members.length})</h2>
+        <h2 class="text-sm font-semibold text-[var(--color-text-muted)] mb-2">그룹원 (${s.members.length})</h2>
         <div class="flex flex-wrap gap-2">${membersHtml}</div>
       </div>
 
@@ -673,9 +880,6 @@ async function handleToggleStatus(problemId) {
   }
 }
 
-// =========================================================
-// 7. 문제 등록 (소문항 포함)
-// =========================================================
 let draftProblems = [];
 
 function emptyDraftProblem() {
@@ -686,13 +890,13 @@ function renderNewProblem(user, groupId) {
   draftProblems = [emptyDraftProblem()];
   renderApp(`
     <div class="max-w-2xl mx-auto px-4 py-8">
-      <a href="#/group/${groupId}" class="text-sm text-gray-400">← 그룹으로</a>
+      <a href="#/group/${groupId}" class="text-sm text-[var(--color-text-muted)]">← 그룹으로</a>
       <h1 class="text-2xl font-bold mt-2 mb-6">문제 등록</h1>
       <form id="new-problem-form" class="space-y-4">
         <div id="draft-problems"></div>
-        <button type="button" id="add-problem-btn" class="w-full rounded-lg border border-dashed border-gray-300 text-gray-500 text-sm py-2.5 hover:bg-gray-50">+ 문제 추가</button>
-        <p id="new-problem-error" class="text-sm text-red-500 hidden"></p>
-        <button type="submit" id="new-problem-submit" class="w-full rounded-lg brand-bg text-white font-medium py-2.5">등록 완료</button>
+        <button type="button" id="add-problem-btn" class="w-full rounded-lg border border-dashed border-[var(--color-border)] text-[var(--color-text-muted)] text-sm py-2.5 hover:bg-[var(--color-surface-2)]">+ 문제 추가</button>
+        <p id="new-problem-error" class="text-sm text-[var(--color-accent)] hidden"></p>
+        <button type="submit" id="new-problem-submit" class="w-full rounded-lg brand-bg font-medium py-2.5">등록 완료</button>
       </form>
     </div>
   `);
@@ -715,21 +919,21 @@ function drawDraftProblems() {
         .map(
           (sub, subIdx) => `
           <div class="flex items-center gap-2">
-            <span class="text-xs text-gray-400">${idx + 1}-${subIdx + 1}</span>
-            <input type="text" data-p="${idx}" data-s="${subIdx}" class="sub-input flex-1 rounded-lg border border-gray-300 px-3 py-1.5 text-sm brand-ring" placeholder="소문항 제목 (예: (1), (2))" value="${escapeHtml(sub)}" />
-            <button type="button" data-p="${idx}" data-s="${subIdx}" class="remove-sub-btn text-xs text-gray-400 hover:text-red-500">삭제</button>
+            <span class="text-xs text-[var(--color-text-muted)]">${idx + 1}-${subIdx + 1}</span>
+            <input type="text" data-p="${idx}" data-s="${subIdx}" class="sub-input flex-1 rounded-lg border border-[var(--color-border)] px-3 py-1.5 text-sm brand-ring" placeholder="소문항 제목 (예: (1), (2))" value="${escapeHtml(sub)}" />
+            <button type="button" data-p="${idx}" data-s="${subIdx}" class="remove-sub-btn text-xs text-[var(--color-text-muted)] hover:text-[var(--color-accent)]">삭제</button>
           </div>`
         )
         .join("");
 
       return `
-        <div class="bg-white rounded-xl border border-gray-200 p-4" data-problem-block="${idx}">
+        <div class="card p-4" data-problem-block="${idx}">
           <div class="flex items-center gap-2">
-            <span class="text-xs text-gray-400 shrink-0">${idx + 1}.</span>
-            <input type="text" data-p="${idx}" class="title-input flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm brand-ring" placeholder="문제 제목 (예: 1번 문제, 확률과 통계 3번)" value="${escapeHtml(p.title)}" />
+            <span class="text-xs text-[var(--color-text-muted)] shrink-0">${idx + 1}.</span>
+            <input type="text" data-p="${idx}" class="title-input flex-1 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm brand-ring" placeholder="문제 제목 (예: 1번 문제, 확률과 통계 3번)" value="${escapeHtml(p.title)}" />
             ${
               draftProblems.length > 1
-                ? `<button type="button" data-p="${idx}" class="remove-problem-btn text-xs text-gray-400 hover:text-red-500 shrink-0">삭제</button>`
+                ? `<button type="button" data-p="${idx}" class="remove-problem-btn text-xs text-[var(--color-text-muted)] hover:text-[var(--color-accent)] shrink-0">삭제</button>`
                 : ""
             }
           </div>
