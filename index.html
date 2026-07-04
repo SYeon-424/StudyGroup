@@ -23,7 +23,8 @@
 (function () {
   try {
     var saved = localStorage.getItem("studygroup-theme");
-    var theme = saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    // 시스템이 다크모드여도 사용자가 직접 토글을 누르기 전까진 항상 라이트로 시작
+    var theme = saved || "light";
     document.documentElement.setAttribute("data-theme", theme);
   } catch (e) {}
 })();
@@ -43,9 +44,9 @@
 
   :root,
   [data-theme="light"] {
-    color-scheme: light;
+    color-scheme: light only;
     --color-bg: #f2f0e8;
-    --color-grid-dot: rgba(31, 36, 48, 0.07);
+    --color-grid-dot: rgba(31, 36, 48, 0.16);
     --color-surface: #fffdf8;
     --color-surface-2: #ece8dc;
     --color-border: #ddd6c4;
@@ -65,7 +66,7 @@
   [data-theme="dark"] {
     color-scheme: dark;
     --color-bg: #16171c;
-    --color-grid-dot: rgba(230, 227, 218, 0.06);
+    --color-grid-dot: rgba(230, 227, 218, 0.14);
     --color-surface: #1f2127;
     --color-surface-2: #26282f;
     --color-border: #34363f;
@@ -88,7 +89,7 @@
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: "LXGW WenKai Mono KR", "Noto Sans KR", ui-sans-serif, system-ui, sans-serif;
-    background-image: radial-gradient(var(--color-grid-dot) 1px, transparent 1px);
+    background-image: radial-gradient(var(--color-grid-dot) 1.5px, transparent 1.5px);
     background-size: 22px 22px;
     transition: background-color 0.2s ease, color 0.2s ease;
     min-height: 100vh;
