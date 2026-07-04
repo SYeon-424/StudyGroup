@@ -433,9 +433,35 @@ window.addEventListener("DOMContentLoaded", () => {
 sb.auth.onAuthStateChange(() => route());
 
 function registerServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
-  }
+  if (!("serviceWorker" in navigator)) return;
+
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then((registration) => {
+      // 등록 직후 항상 새 버전이 있는지 즉시 확인 (브라우저의 24시간 자동 체크 주기를 기다리지 않음)
+      registration.update();
+
+      // 새 서비스워커가 발견되면 설치 완료 즉시 활성화되도록 하고,
+      // 활성화되면(=새 버전이 이 페이지를 통제하게 되면) 한 번만 새로고침해서 최신 화면을 보여줌
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "activated" && navigator.serviceWorker.controller) {
+            location.reload();
+          }
+        });
+      });
+    })
+    .catch(() => {});
+
+  // 다른 이유로 컨트롤러가 바뀌는 경우(예: skipWaiting)도 한 번 새로고침해서 동기화
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
 }
 
 function renderLogin() {
