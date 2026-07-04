@@ -1,58 +1,23 @@
-const CACHE_NAME = "studygroup-v6";
-const APP_SHELL = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon.ico",
-  "./icon-192.png",
-  "./icon-512.png",
-];
-
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // cache.addAll은 하나라도 실패하면 전체 설치가 실패한다.
-      // 파일 하나가 없어도(404) 서비스워커 설치 자체는 계속 진행되도록 개별 처리한다.
-      return Promise.allSettled(
-        APP_SHELL.map((url) => cache.add(url).catch((err) => {
-          console.warn("캐싱 실패(무시하고 계속):", url, err);
-        }))
-      );
-    })
-  );
+// 이 서비스워커는 더 이상 사용하지 않습니다.
+// 폰에 이미 설치되어 있는 예전 서비스워커를 자동으로 제거하고,
+// 페이지를 한 번 새로고침해서 서비스워커 없는 정상 상태로 되돌립니다.
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
-        )
-      )
-  );
-  self.clients.claim();
-});
+    (async () => {
+      // 이 서비스워커가 관리하던 캐시를 전부 삭제
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
 
-// 앱 쉘(HTML/manifest/아이콘)은 네트워크 우선, 실패 시 캐시로 폴백.
-// 그 외(Supabase API, CDN 등)는 서비스워커가 관여하지 않고 그대로 통과시킴.
-self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-  const isSameOrigin = url.origin === self.location.origin;
+      // 자기 자신을 등록 해제
+      await self.registration.unregister();
 
-  if (!isSameOrigin || event.request.method !== "GET") {
-    return;
-  }
-
-  event.respondWith(
-    fetch(event.request)
-      .then((response) => {
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        return response;
-      })
-      .catch(() => caches.match(event.request).then((res) => res || caches.match("./index.html")))
+      // 이 서비스워커의 영향을 받던 모든 탭을 새로고침
+      const allClients = await self.clients.matchAll({ type: "window" });
+      allClients.forEach((client) => client.navigate(client.url));
+    })()
   );
 });
