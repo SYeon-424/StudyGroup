@@ -424,13 +424,47 @@ async function route() {
   location.hash = "#/groups";
 }
 
-window.addEventListener("hashchange", route);
-window.addEventListener("DOMContentLoaded", () => {
-  initTheme();
-  route();
-  registerServiceWorker();
+// 어디선가 에러가 나서 화면이 비어버리는 대신, 에러 내용을 화면에 직접 보여준다.
+// (삼성 인터넷 등 개발자도구 접근이 번거로운 환경에서 원인을 바로 확인하기 위함)
+function showFatalError(message) {
+  const app = document.getElementById("app");
+  if (!app) return;
+  app.innerHTML = `
+    <div style="padding:2rem;max-width:640px;margin:0 auto;font-family:monospace;">
+      <p style="color:#e2685a;font-weight:bold;margin-bottom:0.5rem;">오류가 발생했습니다</p>
+      <p style="white-space:pre-wrap;word-break:break-all;color:#e9e6dc;background:#26282f;padding:1rem;border-radius:0.5rem;">${escapeHtml(message)}</p>
+      <p style="color:#93908a;margin-top:1rem;font-size:0.85rem;">이 화면을 캡처해서 알려주세요.</p>
+    </div>
+  `;
+}
+
+window.addEventListener("error", (e) => {
+  showFatalError(`${e.message}\n(${e.filename}:${e.lineno}:${e.colno})`);
 });
-sb.auth.onAuthStateChange(() => route());
+
+window.addEventListener("unhandledrejection", (e) => {
+  const reason = e.reason;
+  const msg = reason && reason.message ? reason.message : String(reason);
+  const stack = reason && reason.stack ? "\n" + reason.stack : "";
+  showFatalError(`Promise 오류: ${msg}${stack}`);
+});
+
+window.addEventListener("hashchange", () => {
+  route().catch((err) => showFatalError(`${err.message}\n${err.stack || ""}`));
+});
+window.addEventListener("DOMContentLoaded", () => {
+  try {
+    initTheme();
+    route().catch((err) => showFatalError(`${err.message}\n${err.stack || ""}`));
+    registerServiceWorker();
+  } catch (err) {
+    showFatalError(`${err.message}\n${err.stack || ""}`);
+  }
+});
+sb.auth.onAuthStateChange(() => {
+  route().catch((err) => showFatalError(`${err.message}\n${err.stack || ""}`));
+});
+
 
 // 서비스워커(오프라인 캐싱)는 계속 캐시 문제를 일으켜서 완전히 제거했습니다.
 // 이미 폰에 설치되어 있는 예전 서비스워커/캐시를 여기서 직접 정리합니다.
