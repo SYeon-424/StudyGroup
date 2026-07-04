@@ -263,6 +263,44 @@
     border-color: var(--color-accent);
   }
 
+  .drag-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.2rem;
+    height: 1.6rem;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+  }
+  .drag-handle:hover { color: var(--color-text); }
+  .dragging-item { opacity: 0.5; }
+  body.no-select { user-select: none; }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 15, 0.5);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .modal-card {
+    width: 100%;
+    max-width: 28rem;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  .panel-sub-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
   .invite-chip {
     font-family: "LXGW WenKai Mono KR", monospace;
     letter-spacing: 0.15em;
@@ -844,16 +882,11 @@ function filterTree(nodes, state) {
 
 function renderProblemNode(node, depth, state) {
   const isLeaf = node.children.length === 0;
+  const isRoot = depth === 0;
   const status = isLeaf ? state.statusMap[`${node.id}::${state.currentUserId}`] || "unsolved" : null;
   const cfg = status ? STATUS_CONFIG[status] : null;
   const isFiltering = state.searchQuery.trim() !== "" || state.statusFilter !== "all";
   const isCollapsed = !isFiltering && state.collapsedIds.has(node.id);
-  const isEditing = state.editingId === node.id;
-
-  const siblings = getSiblings(state.problems, node.parent_id || null);
-  const idxInSiblings = siblings.findIndex((p) => p.id === node.id);
-  const canMoveUp = idxInSiblings > 0;
-  const canMoveDown = idxInSiblings >= 0 && idxInSiblings < siblings.length - 1;
 
   const othersHtml =
     isLeaf && state.members.length > 1
@@ -869,21 +902,20 @@ function renderProblemNode(node, depth, state) {
         `</div>`
       : "";
 
-  const titleHtml = isEditing
-    ? `<div class="flex-1 flex items-center gap-1.5">
-        <input type="text" class="edit-title-input flex-1 rounded-md border border-[var(--color-border)] px-2 py-1 text-sm brand-ring" value="${escapeHtml(node.title)}" data-id="${node.id}" />
-        <button data-id="${node.id}" class="save-edit-btn icon-btn" title="저장" aria-label="저장">✔</button>
-        <button class="cancel-edit-btn icon-btn" title="취소" aria-label="취소">✕</button>
-      </div>`
-    : `<p class="problem-title-text font-medium flex-1">${escapeHtml(node.title)}</p>`;
+  const dragHandleHtml =
+    isRoot && !isFiltering
+      ? `<span class="drag-handle" title="드래그해서 순서 변경">⠿</span>`
+      : `<span style="width:1rem;display:inline-block;"></span>`;
 
-  const controlsHtml = isEditing
-    ? ""
-    : `<div class="flex items-center gap-0.5 shrink-0">
-        <button data-id="${node.id}" data-parent="${node.parent_id || ""}" data-dir="up" class="move-btn icon-btn" title="위로" aria-label="위로" ${canMoveUp ? "" : "disabled"}>▲</button>
-        <button data-id="${node.id}" data-parent="${node.parent_id || ""}" data-dir="down" class="move-btn icon-btn" title="아래로" aria-label="아래로" ${canMoveDown ? "" : "disabled"}>▼</button>
-        <button data-id="${node.id}" class="edit-btn icon-btn" title="수정" aria-label="수정">✎</button>
-        <button data-id="${node.id}" class="delete-btn icon-btn" title="삭제" aria-label="삭제">🗑</button>
+  const titleHtml = `<p class="problem-title-text font-medium flex-1">${escapeHtml(node.title)}</p>`;
+
+  const controlsHtml = `<div class="flex items-center gap-0.5 shrink-0">
+        ${
+          isRoot
+            ? `<button data-id="${node.id}" class="edit-btn icon-btn" title="수정" aria-label="수정">✎</button>
+        <button data-id="${node.id}" class="delete-btn icon-btn" title="삭제" aria-label="삭제">🗑</button>`
+            : ""
+        }
         ${
           isLeaf
             ? `<button data-toggle-id="${node.id}" title="${cfg.label}" aria-label="${cfg.label}" class="toggle-status-btn ${cfg.stampCls}">${cfg.symbol}</button>`
@@ -901,9 +933,10 @@ function renderProblemNode(node, depth, state) {
       : "";
 
   return `
-    <div style="margin-left:${depth * 14}px">
+    <div ${isRoot ? `data-sort-id="${node.id}"` : ""} style="margin-left:${depth * 14}px">
       <div class="card problem-row">
         <div class="flex items-center gap-1.5">
+          ${dragHandleHtml}
           ${collapseBtnHtml}
           ${titleHtml}
           ${controlsHtml}
@@ -933,7 +966,7 @@ async function renderGroupDetail(user, groupId) {
     collapsedIds: new Set(),
     searchQuery: "",
     statusFilter: "all",
-    editingId: null,
+    editPanelId: null,
   };
 
   drawGroupShell();
@@ -990,6 +1023,7 @@ function drawGroupShell() {
       </div>
 
       <div id="problem-tree" class="space-y-1.5 mt-4"></div>
+      <div id="edit-panel-overlay"></div>
     </div>
   `);
 
@@ -1014,6 +1048,69 @@ function drawGroupShell() {
       renderTree();
     });
   });
+}
+
+// 손잡이(handleSelector)를 눌러 itemSelector에 해당하는 형제 요소들의 순서를 드래그로 바꾸는 범용 유틸.
+// 드롭 시 새 순서의 data-sort-id 배열을 onReorder로 전달.
+function initSortable(container, itemSelector, handleSelector, onReorder) {
+  let draggingEl = null;
+
+  function getItems() {
+    return Array.from(container.querySelectorAll(itemSelector));
+  }
+
+  function onPointerMove(e) {
+    if (!draggingEl) return;
+    const y = e.clientY;
+    const items = getItems().filter((i) => i !== draggingEl);
+    let target = null;
+    for (const item of items) {
+      const rect = item.getBoundingClientRect();
+      if (y < rect.top + rect.height / 2) {
+        target = item;
+        break;
+      }
+    }
+    if (target) container.insertBefore(draggingEl, target);
+    else container.appendChild(draggingEl);
+  }
+
+  function onPointerUp() {
+    if (!draggingEl) return;
+    draggingEl.classList.remove("dragging-item");
+    document.body.classList.remove("no-select");
+    const finished = draggingEl;
+    draggingEl = null;
+    document.removeEventListener("pointermove", onPointerMove);
+    document.removeEventListener("pointerup", onPointerUp);
+    const order = getItems().map((el) => el.getAttribute("data-sort-id"));
+    onReorder(order);
+  }
+
+  container.addEventListener("pointerdown", (e) => {
+    const handle = e.target.closest(handleSelector);
+    if (!handle || !container.contains(handle)) return;
+    const item = handle.closest(itemSelector);
+    if (!item) return;
+    e.preventDefault();
+    draggingEl = item;
+    draggingEl.classList.add("dragging-item");
+    document.body.classList.add("no-select");
+    document.addEventListener("pointermove", onPointerMove);
+    document.addEventListener("pointerup", onPointerUp);
+  });
+}
+
+// 서버와 상태가 어긋났을 때 문제/상태를 다시 불러와 동기화.
+async function refreshProblems() {
+  const s = window.__detailState;
+  const detail = await fetchGroupDetail(s.groupId);
+  if (!detail) return;
+  s.members = detail.members;
+  s.problems = detail.problems;
+  s.statusMap = buildStatusMap(detail.statuses);
+  renderTree();
+  renderEditPanel();
 }
 
 // 검색/포커스를 유지한 채 문제 트리 부분만 다시 그림.
@@ -1062,47 +1159,16 @@ function renderTree(opts) {
     });
   });
   container.querySelectorAll(".edit-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      s.editingId = btn.getAttribute("data-id");
-      renderTree();
-      const input = container.querySelector(".edit-title-input");
-      if (input) {
-        input.focus();
-        input.setSelectionRange(input.value.length, input.value.length);
-      }
-    });
-  });
-  container.querySelectorAll(".cancel-edit-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      s.editingId = null;
-      renderTree();
-    });
-  });
-  container.querySelectorAll(".save-edit-btn").forEach((btn) => {
-    btn.addEventListener("click", () => handleSaveEdit(btn.getAttribute("data-id")));
-  });
-  container.querySelectorAll(".edit-title-input").forEach((input) => {
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSaveEdit(input.getAttribute("data-id"));
-      } else if (e.key === "Escape") {
-        s.editingId = null;
-        renderTree();
-      }
-    });
+    btn.addEventListener("click", () => openEditPanel(btn.getAttribute("data-id")));
   });
   container.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", () => handleDeleteProblem(btn.getAttribute("data-id")));
   });
-  container.querySelectorAll(".move-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-id");
-      const parent = btn.getAttribute("data-parent") || null;
-      const dir = btn.getAttribute("data-dir");
-      handleMoveProblem(id, parent, dir);
-    });
-  });
+
+  if (!isFiltering && !container.dataset.sortableAttached) {
+    initSortable(container, ":scope > div[data-sort-id]", ".drag-handle", (orderedIds) => persistOrder(orderedIds));
+    container.dataset.sortableAttached = "1";
+  }
 }
 
 async function handleToggleStatus(problemId) {
@@ -1124,27 +1190,6 @@ async function handleToggleStatus(problemId) {
   }
 }
 
-async function handleSaveEdit(problemId) {
-  const s = window.__detailState;
-  const container = document.getElementById("problem-tree");
-  const input = container.querySelector(`.edit-title-input[data-id="${problemId}"]`);
-  const newTitle = input ? input.value.trim() : "";
-  if (!newTitle) return;
-
-  const problem = s.problems.find((p) => p.id === problemId);
-  const prevTitle = problem ? problem.title : "";
-  if (problem) problem.title = newTitle;
-  s.editingId = null;
-  renderTree();
-
-  const { error } = await sb.from("problems").update({ title: newTitle }).eq("id", problemId);
-  if (error) {
-    if (problem) problem.title = prevTitle;
-    alert("수정에 실패했습니다. 다시 시도해주세요.");
-    renderTree();
-  }
-}
-
 async function handleDeleteProblem(problemId) {
   if (!confirm("이 문제를 삭제할까요? 하위 소문항이 있다면 함께 삭제됩니다.")) return;
   const s = window.__detailState;
@@ -1159,7 +1204,9 @@ async function handleDeleteProblem(problemId) {
   Object.keys(s.statusMap).forEach((key) => {
     if (idsToDelete.some((id) => key.startsWith(`${id}::`))) delete s.statusMap[key];
   });
+  if (s.editPanelId && idsToDelete.includes(s.editPanelId)) s.editPanelId = null;
   renderTree();
+  renderEditPanel();
 
   const { error: statusError } = await sb.from("statuses").delete().in("problem_id", idsToDelete);
   const { error: problemError } = await sb.from("problems").delete().in("id", idsToDelete);
@@ -1172,29 +1219,202 @@ async function handleDeleteProblem(problemId) {
   }
 }
 
-async function handleMoveProblem(problemId, parentId, direction) {
+// 최상위 문제 목록의 순서를 저장. parentId가 없으면 최상위(루트) 문제들의 순서.
+async function persistOrder(orderedIds) {
   const s = window.__detailState;
-  const siblings = getSiblings(s.problems, parentId);
-  const idx = siblings.findIndex((p) => p.id === problemId);
-  const swapIdx = direction === "up" ? idx - 1 : idx + 1;
-  if (idx === -1 || swapIdx < 0 || swapIdx >= siblings.length) return;
-
-  const a = siblings[idx];
-  const b = siblings[swapIdx];
-  const aPos = a.position;
-  const bPos = b.position;
-
-  a.position = bPos;
-  b.position = aPos;
+  orderedIds.forEach((id, i) => {
+    const p = s.problems.find((pp) => pp.id === id);
+    if (p) p.position = i;
+  });
   renderTree();
 
-  const { error: err1 } = await sb.from("problems").update({ position: bPos }).eq("id", a.id);
-  const { error: err2 } = await sb.from("problems").update({ position: aPos }).eq("id", b.id);
+  try {
+    const results = await Promise.all(orderedIds.map((id, i) => sb.from("problems").update({ position: i }).eq("id", id)));
+    if (results.some((r) => r.error)) throw new Error("update failed");
+  } catch (e) {
+    alert("순서 저장에 실패했습니다. 다시 불러옵니다.");
+    await refreshProblems();
+  }
+}
 
-  if (err1 || err2) {
-    a.position = aPos;
-    b.position = bPos;
+// ===================== 문제 수정 패널 (제목 수정 + 소문항 관리) =====================
+
+function openEditPanel(problemId) {
+  const s = window.__detailState;
+  s.editPanelId = problemId;
+  renderEditPanel();
+}
+
+function closeEditPanel() {
+  const s = window.__detailState;
+  s.editPanelId = null;
+  renderEditPanel();
+}
+
+function renderEditPanel() {
+  const s = window.__detailState;
+  const overlay = document.getElementById("edit-panel-overlay");
+  if (!overlay) return;
+
+  if (!s.editPanelId) {
+    overlay.innerHTML = "";
+    return;
+  }
+
+  const root = s.problems.find((p) => p.id === s.editPanelId);
+  if (!root) {
+    s.editPanelId = null;
+    overlay.innerHTML = "";
+    return;
+  }
+
+  const subs = getSiblings(s.problems, root.id);
+
+  const subsHtml = subs
+    .map(
+      (sub) => `
+      <div class="panel-sub-row" data-sort-id="${sub.id}">
+        <span class="drag-handle" title="드래그해서 순서 변경">⠿</span>
+        <input type="text" class="panel-sub-input flex-1 rounded-md border border-[var(--color-border)] px-2 py-1.5 text-sm brand-ring" data-id="${sub.id}" value="${escapeHtml(sub.title)}" placeholder="소문항 제목" />
+        <button data-id="${sub.id}" class="panel-delete-sub-btn icon-btn" title="삭제" aria-label="삭제">🗑</button>
+      </div>`
+    )
+    .join("");
+
+  overlay.innerHTML = `
+    <div class="modal-backdrop" id="edit-panel-backdrop">
+      <div class="modal-card card p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-bold">문제 수정</h2>
+          <button id="edit-panel-close" class="icon-btn" title="닫기" aria-label="닫기">✕</button>
+        </div>
+
+        <label class="text-xs text-[var(--color-text-muted)] mb-1 block">문제 제목</label>
+        <input type="text" id="panel-title-input" class="w-full rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm brand-ring mb-5" value="${escapeHtml(root.title)}" />
+
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs text-[var(--color-text-muted)]">소문항</label>
+          <button id="panel-add-sub-btn" type="button" class="text-xs font-medium brand-text">+ 소문항 추가</button>
+        </div>
+        <div id="panel-sublist" class="space-y-2">
+          ${subsHtml || `<p class="text-xs text-[var(--color-text-muted)] py-2">소문항이 없습니다.</p>`}
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("edit-panel-backdrop").addEventListener("click", (e) => {
+    if (e.target.id === "edit-panel-backdrop") closeEditPanel();
+  });
+  document.getElementById("edit-panel-close").addEventListener("click", closeEditPanel);
+
+  const titleInput = document.getElementById("panel-title-input");
+  titleInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      titleInput.blur();
+    }
+  });
+  titleInput.addEventListener("blur", () => handleSaveTitle(root.id, titleInput));
+
+  document.getElementById("panel-add-sub-btn").addEventListener("click", () => handleAddSub(root.id));
+
+  const sublist = document.getElementById("panel-sublist");
+  sublist.querySelectorAll(".panel-sub-input").forEach((input) => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        input.blur();
+      }
+    });
+    input.addEventListener("blur", () => handleSaveTitle(input.getAttribute("data-id"), input));
+  });
+  sublist.querySelectorAll(".panel-delete-sub-btn").forEach((btn) => {
+    btn.addEventListener("click", () => handleDeleteSub(btn.getAttribute("data-id")));
+  });
+
+  if (subs.length > 1) {
+    initSortable(sublist, ":scope > .panel-sub-row", ".drag-handle", (orderedIds) => persistOrder(orderedIds));
+  }
+}
+
+async function handleSaveTitle(problemId, inputEl) {
+  const s = window.__detailState;
+  const problem = s.problems.find((p) => p.id === problemId);
+  if (!problem) return;
+
+  const newTitle = inputEl.value.trim();
+  if (!newTitle) {
+    inputEl.value = problem.title;
+    return;
+  }
+  if (newTitle === problem.title) return;
+
+  const prev = problem.title;
+  problem.title = newTitle;
+  renderTree();
+
+  const { error } = await sb.from("problems").update({ title: newTitle }).eq("id", problemId);
+  if (error) {
+    problem.title = prev;
+    inputEl.value = prev;
+    alert("수정에 실패했습니다. 다시 시도해주세요.");
     renderTree();
+  }
+}
+
+async function handleAddSub(parentId) {
+  const s = window.__detailState;
+  const siblings = getSiblings(s.problems, parentId);
+  const nextPosition = siblings.length;
+
+  const { data, error } = await sb
+    .from("problems")
+    .insert({ group_id: s.groupId, parent_id: parentId, title: "새 소문항", position: nextPosition, created_by: s.currentUserId })
+    .select()
+    .single();
+
+  if (error || !data) {
+    alert("소문항 추가에 실패했습니다. 다시 시도해주세요.");
+    return;
+  }
+
+  s.problems.push(data);
+  renderTree();
+  renderEditPanel();
+
+  requestAnimationFrame(() => {
+    const input = document.querySelector(`.panel-sub-input[data-id="${data.id}"]`);
+    if (input) {
+      input.focus();
+      input.select();
+    }
+  });
+}
+
+async function handleDeleteSub(subId) {
+  if (!confirm("이 소문항을 삭제할까요?")) return;
+  const s = window.__detailState;
+
+  const prevProblems = s.problems;
+  const prevStatusMap = { ...s.statusMap };
+
+  s.problems = s.problems.filter((p) => p.id !== subId);
+  Object.keys(s.statusMap).forEach((key) => {
+    if (key.startsWith(`${subId}::`)) delete s.statusMap[key];
+  });
+  renderTree();
+  renderEditPanel();
+
+  const { error: statusError } = await sb.from("statuses").delete().eq("problem_id", subId);
+  const { error: problemError } = await sb.from("problems").delete().eq("id", subId);
+
+  if (statusError || problemError) {
+    s.problems = prevProblems;
+    s.statusMap = prevStatusMap;
+    alert("삭제에 실패했습니다. 다시 시도해주세요.");
+    renderTree();
+    renderEditPanel();
   }
 }
 
