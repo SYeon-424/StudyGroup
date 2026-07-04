@@ -1431,7 +1431,7 @@ function emptyDraftProblem() {
   return { title: "", subs: [] };
 }
 
-function renderNewProblem(user, groupId) {
+async function renderNewProblem(user, groupId) {
   draftProblems = [emptyDraftProblem()];
   renderApp(`
     <div class="max-w-2xl mx-auto px-4 py-8">
@@ -1453,7 +1453,15 @@ function renderNewProblem(user, groupId) {
     drawDraftProblems();
   });
 
-  document.getElementById("new-problem-form").addEventListener("submit", (e) => handleSubmitProblems(e, user, groupId));
+  // 기존 최상위 문제 개수를 가져와서, 새 문제들이 그 뒤(맨 아래)에 이어지도록 시작 position을 구함
+  const { count } = await sb
+    .from("problems")
+    .select("id", { count: "exact", head: true })
+    .eq("group_id", groupId)
+    .is("parent_id", null);
+  const startPosition = count || 0;
+
+  document.getElementById("new-problem-form").addEventListener("submit", (e) => handleSubmitProblems(e, user, groupId, startPosition));
 }
 
 function drawDraftProblems() {
@@ -1520,7 +1528,7 @@ function drawDraftProblems() {
   });
 }
 
-async function handleSubmitProblems(e, user, groupId) {
+async function handleSubmitProblems(e, user, groupId, startPosition) {
   e.preventDefault();
   const errEl = document.getElementById("new-problem-error");
   const submitBtn = document.getElementById("new-problem-submit");
@@ -1539,9 +1547,10 @@ async function handleSubmitProblems(e, user, groupId) {
   submitBtn.disabled = true;
   submitBtn.textContent = "등록 중...";
 
+  const base = startPosition || 0;
   const { data: insertedParents, error: parentError } = await sb
     .from("problems")
-    .insert(cleaned.map((p, idx) => ({ group_id: groupId, title: p.title, position: idx, created_by: user.id })))
+    .insert(cleaned.map((p, idx) => ({ group_id: groupId, title: p.title, position: base + idx, created_by: user.id })))
     .select();
 
   if (parentError || !insertedParents) {
